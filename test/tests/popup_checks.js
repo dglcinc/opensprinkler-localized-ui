@@ -104,4 +104,65 @@ describe("Popup Checks", function () {
 			OSApp.Language.languageSelect();
 		});
 	});
+
+	it("Station image picker button does not submit the attribute form", function (done) {
+		var openStationAttributes = function() {
+			var settings = $("#sprinklers .station-settings").first();
+
+			assert.lengthOf(settings, 1);
+
+			$.mobile.document.one("popupafteropen", "#stn_attrib", function () {
+				var popup = $("#stn_attrib");
+
+				assert.equal(popup.find(".changeBackground").attr("type"), "button");
+
+				$.mobile.document.one("popupafterclose", "#stn_attrib", function () {
+					done();
+				});
+				popup.popup("close").remove();
+			});
+
+			assert.doesNotThrow(function () {
+				settings.trigger("click");
+			});
+		};
+
+		if ($("#sprinklers .station-settings").length === 0) {
+			OSApp.currentSession.ip = "demo.opensprinkler.com";
+			OSApp.currentSession.pass = "opendoor";
+			OSApp.currentSession.prefix = "https://";
+			OSApp.currentSession.fw183 = false;
+			OSApp.currentSession.controller = {
+				options: { fwv: 221, fwm: 0, wl: 100 },
+				programs: { pd: [] },
+				settings: {
+					devt: 1732789106,
+					dname: "Test",
+					email: {},
+					gpio: [],
+					nbrd: 1,
+					ps: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+				},
+				stations: {
+					ignore_rain: [0],
+					ignore_sn1: [0],
+					ignore_sn2: [0],
+					maxlen: 32,
+					snames: ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08"],
+					stn_dis: [0],
+					stn_grp: [0, 0, 0, 0, 0, 0, 0, 0],
+					stn_spe: [0]
+				},
+				status: [0, 0, 0, 0, 0, 0, 0, 0]
+			};
+			OSApp.Sites.updateSiteList(["Test"], "Test");
+			OSApp.Storage.set({
+				current_site: "Test",
+				sites: JSON.stringify({ Test: { images: {}, notes: {}, os_ip: "demo.opensprinkler.com", os_pw: "opendoor" } })
+			});
+			OSApp.Dashboard.displayPage();
+		}
+
+		openStationAttributes();
+	});
 });
