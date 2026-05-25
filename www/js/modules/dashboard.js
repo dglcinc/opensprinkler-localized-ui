@@ -389,7 +389,7 @@ OSApp.Dashboard.displayPage = function() {
 				"<input class='bold center' data-corners='false' data-wrapper-class='tight stn-name ui-btn' id='stn-name' type='text' value=\"" +
 				OSApp.currentSession.controller.stations.snames[sid] + "\">";
 
-			select += "<button class='changeBackground'>" +
+			select += "<button type='button' class='changeBackground'>" +
 				( typeof sites[ currentSite ].images[ sid ] !== "string" ? OSApp.Language._( "Add" ) : OSApp.Language._( "Change" ) ) + " " + OSApp.Language._( "Image" ) +
 				"</button>";
 
