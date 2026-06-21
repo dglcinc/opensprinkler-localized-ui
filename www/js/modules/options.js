@@ -1042,8 +1042,36 @@ OSApp.Options.showOptions = function( expandItem ) {
         page.find( "#isMetric" ).on( "change", function() {
                 OSApp.currentDevice.isMetric = this.checked;
                 OSApp.Storage.set( { isMetric: this.checked } );
+
+                // Keep the Flow Pulse Rate row in sync with the unit system: flip
+                // its unit dropdown and convert the displayed value live (the row
+                // is rendered once, so toggling isMetric must update it in place).
+                var o41Units = page.find( "#o41-units" );
+                if ( o41Units.length ) {
+                        var target = this.checked ? "liter" : "gallon";
+                        if ( o41Units.val() !== target ) {
+                                o41Units.val( target ).trigger( "change" );
+                                if ( typeof o41Units.selectmenu === "function" ) {
+                                        try { o41Units.selectmenu( "refresh" ); } catch ( e ) {}
+                                }
+                        }
+                }
+
                 OSApp.Language.updateUIElements();
                 return false;
+        } );
+
+        // Convert the displayed Flow Pulse Rate when its unit dropdown changes
+        // (the value was entered in the previously-selected unit; canonical = L).
+        page.find( "#o41-units" ).on( "change", function() {
+                var input = page.find( "#o41" ),
+                        val = parseFloat( input.val() );
+                if ( isNaN( val ) ) {
+                        return;
+                }
+                input.val( this.value === "gallon" ?
+                        parseFloat( ( val / OSApp.Utils.LITERS_PER_GALLON ).toFixed( 2 ) ) :
+                        parseFloat( ( val * OSApp.Utils.LITERS_PER_GALLON ).toFixed( 2 ) ) );
         } );
 
         page.find( "#is24Hour" ).on( "change", function() {
