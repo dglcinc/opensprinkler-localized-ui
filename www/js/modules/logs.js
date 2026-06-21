@@ -210,7 +210,7 @@ OSApp.Logs.displayPage = function() {
 							"start": new Date( utc.getTime() - parseInt( this[ 2 ] * 1000 ) ),
 							"end": utc,
 							"className": "",
-							"content": volume + " L",
+							"content": OSApp.Utils.volumeToDisplay( volume ) + " " + OSApp.Utils.volumeUnit(),
 							"group": OSApp.Language._( "Flow Sensor" )
 						} );
 						if ( !groups.some( elem => elem.id === OSApp.Language._( "Flow Sensor" ) ) ) {
@@ -411,7 +411,7 @@ OSApp.Logs.displayPage = function() {
 
 					if ( flSorted[ group ] ) {
 						groupArray[ i ] += "<span style='border:none' class='ui-body ui-body-a'>" +
-							OSApp.Language._( "Total Water Used" ) + ": " + flSorted[ group ] + " L" +
+							OSApp.Language._( "Total Water Used" ) + ": " + OSApp.Utils.volumeToDisplay( flSorted[ group ] ) + " " + OSApp.Utils.volumeUnit() +
 							"</span>";
 					}
 
@@ -424,7 +424,7 @@ OSApp.Logs.displayPage = function() {
 						var startTime = formatTime( sortedData[ group ][ k ][ 0 ], grouping ) ;
 						var endTime = formatTime( sortedData[ group ][ k ][ 3 ], grouping );
 						var fRate = sortedData[ group ][ k ][ 4 ];
-						var flowDisplay = ( typeof fRate === "number" ) ? fRate.toFixed( 2 ) + " L/min" : "";
+						var flowDisplay = ( typeof fRate === "number" ) ? OSApp.Utils.volumeToDisplay( fRate ).toFixed( 2 ) + " " + OSApp.Utils.flowRateUnit() : "";
 
 						groupArray[ i ] += "<tr>" +
 							"<td>" + stationName + "</td>" + // Station name
@@ -490,8 +490,8 @@ OSApp.Logs.displayPage = function() {
 						( stats.avgWaterLevel !== 100 ? ( stats.avgWaterLevel < 100 ? "green-text" : "red-text" ) : "" ) +
 						"'>" + stats.avgWaterLevel + "%</span></div>" : ""
 				) +
-				( typeof stats.totalVolume !== "undefined" && stats.totalVolume > 0 ? "<div><span class='bold'>" + OSApp.Language._( "Total Water Used" ) + "</span>: " + stats.totalVolume + " L" +
-					( hasWater && stats.avgWaterLevel < 100 ? " (<span class='green-text'>" + ( stats.totalVolume - ( stats.totalVolume * ( stats.avgWaterLevel / 100 ) ) ).toFixed( 2 ) + "L saved</span>)" : "" ) +
+				( typeof stats.totalVolume !== "undefined" && stats.totalVolume > 0 ? "<div><span class='bold'>" + OSApp.Language._( "Total Water Used" ) + "</span>: " + OSApp.Utils.volumeToDisplay( stats.totalVolume ) + " " + OSApp.Utils.volumeUnit() +
+					( hasWater && stats.avgWaterLevel < 100 ? " (<span class='green-text'>" + OSApp.Utils.volumeToDisplay( stats.totalVolume - ( stats.totalVolume * ( stats.avgWaterLevel / 100 ) ) ).toFixed( 2 ) + " " + OSApp.Utils.volumeUnit() + " saved</span>)" : "" ) +
 					"</div>" : "" ) +
 				"</div>";
 		},
