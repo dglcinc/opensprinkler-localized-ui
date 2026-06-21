@@ -165,6 +165,33 @@ OSApp.Utils.flowRateToVolume = function( rate ) {
        return parseFloat( ( rate * ( ( OSApp.currentSession.controller.options.fpr1 << 8 ) + OSApp.currentSession.controller.options.fpr0 ) / 100 ).toFixed( 2 ) );
 };
 
+// --- Localized volume display (dglcinc fork) ---------------------------------
+// The firmware/app canonical volume unit is LITERS (the pulse-rate "fpr" is
+// stored in liters/pulse; the gallon entry option multiplies by this factor on
+// save). These helpers convert a canonical-liter value to the user's chosen
+// display unit, driven by the existing per-device "Use Metric" (isMetric) flag.
+OSApp.Utils.LITERS_PER_GALLON = 3.78541;
+
+// Canonical liters -> display number in the user's unit (gallons when imperial).
+OSApp.Utils.volumeToDisplay = function( liters ) {
+	if ( typeof liters !== "number" ) {
+		return liters;
+	}
+	return OSApp.currentDevice.isMetric ?
+		liters :
+		parseFloat( ( liters / OSApp.Utils.LITERS_PER_GALLON ).toFixed( 2 ) );
+};
+
+// Volume unit label for the current device locale.
+OSApp.Utils.volumeUnit = function() {
+	return OSApp.currentDevice.isMetric ? "L" : "gal";
+};
+
+// Flow-rate unit label for the current device locale.
+OSApp.Utils.flowRateUnit = function() {
+	return OSApp.currentDevice.isMetric ? "L/min" : "gal/min";
+};
+
 /*
 Returns true when currentSession.controller.settings is populated
 */
