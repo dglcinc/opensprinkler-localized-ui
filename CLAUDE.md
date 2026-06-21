@@ -38,6 +38,14 @@ With `Use Metric` **off**, the UI then shows correct gallons; with it on, correc
 liters. This does **not** affect pivac (it reads the raw pulse frequency `flcrt` with
 its own factor).
 
+> **⚠️ Status caveat (2026-06-21):** the device is currently set to **`fpr=1` (L/pulse)**
+> to keep the *stock* phone app usable via the "read L as gal" convention. Under that
+> setting **this localized UI reads ~3.785× low** — set the device back to **`1 gal/pulse`**
+> (stored ~3.78) before using this UI. The stock app and this fork want *opposite* device
+> settings (the stock app has the liter display bug; this fork fixes it), so pick one as the
+> daily driver. pivac/Grafana are correct under either setting. Resolve long-term by moving
+> fully to this fork (remote via `jsp`, or a native build) and setting `fpr=3.78` for good.
+
 Future (v2, not yet built): decimal comma/dot number formatting and date-format order
 (see the canonical-units model in `pivac/docs/opensprinkler-gallons-ui-fork-scope.md`).
 
