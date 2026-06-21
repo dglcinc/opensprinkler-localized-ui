@@ -666,13 +666,13 @@ OSApp.Options.showOptions = function( expandItem ) {
 				"<tr style='width:100%;vertical-align: top;'>" +
 					"<td style='width:100%'>" +
 						"<div class='ui-input-text controlgroup-textinput ui-btn ui-body-inherit ui-corner-all ui-mini ui-shadow-inset ui-input-has-clear'>" +
-							"<input data-role='none' data-mini='true' type='number' pattern='^[-+]?[0-9]*.?[0-9]*$' id='o41' value='" + ( ( OSApp.currentSession.controller.options.fpr1 * 256 + OSApp.currentSession.controller.options.fpr0 ) / 100 ) + "'>" +
+							"<input data-role='none' data-mini='true' type='number' pattern='^[-+]?[0-9]*.?[0-9]*$' id='o41' value='" + OSApp.Utils.volumeToDisplay( ( OSApp.currentSession.controller.options.fpr1 * 256 + OSApp.currentSession.controller.options.fpr0 ) / 100 ) + "'>" +
 						"</div>" +
 					"</td>" +
 					"<td class='tight-select'>" +
 						"<select id='o41-units' class='noselect' data-mini='true'>" +
-							"<option selected='selected' value='liter'>L/pulse</option>" +
-							"<option value='gallon'>Gal/pulse</option>" +
+							"<option value='liter'" + ( OSApp.currentDevice.isMetric ? " selected='selected'" : "" ) + ">L/pulse</option>" +
+							"<option value='gallon'" + ( OSApp.currentDevice.isMetric ? "" : " selected='selected'" ) + ">Gal/pulse</option>" +
 						"</select>" +
 					"</td>" +
 				"</tr>" +
